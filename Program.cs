@@ -8,7 +8,7 @@ namespace Wardler
     {
         static void Main(string[] args)
         {
-            Vehicles.Crawl();
+            Vehicles.CheckCrawl();
         }
     }
 }
