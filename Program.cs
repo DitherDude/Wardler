@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 
 namespace Wardler
@@ -9,6 +10,7 @@ namespace Wardler
         static void Main(string[] args)
         {
             Vehicles.CheckCrawl();
+            Vehicles.Wardle();
         }
     }
 }

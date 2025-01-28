@@ -18,19 +18,25 @@ namespace Wardler
         public static List<Vehicle> vehicles = new List<Vehicle>();
         public static void CheckCrawl()
         {
+            Console.WriteLine("Attempting to load vehicle data...");
             if (File.Exists("vehicles.war"))
             {
+                Console.WriteLine("Reading vehicle data...");
                 using (StreamReader sr = new StreamReader("vehicles.war"))
                 {
                     foreach (string line in File.ReadLines("vehicles.war"))
                     {
                         string[] data = line.Split(" ");
                         Vehicle vehicle = new Vehicle(data[0], data[1], int.Parse(data[2]), double.Parse(data[3]), int.Parse(data[4]), bool.Parse(data[5]), double.Parse(data[6]), data[7], double.Parse(data[8]));
+                        vehicles.Add(vehicle);
                     }
                 }
+                Console.WriteLine("Vehicle data loaded.");
             }
             else
             {
+                Console.WriteLine("vehicles.war file is missing. Initiating crawl.");
+                Console.WriteLine("Not recommended if you have limited data/internet connection.");
                 Crawl();
                 using (StreamWriter file = new StreamWriter("vehicles.war"))
                 {
@@ -50,8 +56,14 @@ namespace Wardler
                     file.Close();
                 }
             }
+            Console.WriteLine("When asked for result, return in the following format. KEY:\n");
+            Console.WriteLine("C for green; {any char not listed} for red (no arrows)");
+            Console.WriteLine("U for orange-up; D for orange-down;");
+            Console.WriteLine("T for red-up, B for red-down.\n");
+            Console.WriteLine("You should now enter all 8 letters, with no spaces.");
+            Console.WriteLine("e.g. IBBUCBCC");
         }
-        public static void Crawl()
+        private static void Crawl()
         {
             Console.WriteLine("Initiating vehicle crawler...");
             using (HttpClient client = new HttpClient())
@@ -239,6 +251,236 @@ namespace Wardler
             }
             vehicles.Add(vehicle);
         }
+        public static void Wardle()
+        {
+            while (vehicles.Count > 1)
+            {
+                Weigh();
+                Console.Write("\nResult: ");
+                string input = Console.ReadLine().ToUpper();
+                Vehicle vehicle = new Vehicle(
+                    vehicles[0].Name,
+                    vehicles[0].Country,
+                    vehicles[0].Speed,
+                    vehicles[0].Mass,
+                    vehicles[0].Crew,
+                    vehicles[0].Regular,
+                    vehicles[0].Rating,
+                    vehicles[1].Type,
+                    vehicles[0].Caliber,
+                    vehicles[0].Score
+                );
+                //
+                if (input[0] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Country != vehicle.Country);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Country == vehicle.Country);
+                }
+                //
+                if (input[1] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Speed != vehicle.Speed);
+                }
+                else if (input[1] == 'U')
+                {
+                    vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
+                    vehicles.RemoveAll(x => (vehicle.Speed - x.Speed) > 8);
+                }
+                else if (input[1] == 'D')
+                {
+                    vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
+                    vehicles.RemoveAll(x => (x.Speed - vehicle.Speed) > 8);
+                }
+                else if (input[1] == 'T')
+                {
+                    vehicles.RemoveAll(x => x.Speed <= vehicle.Speed);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Speed >= vehicle.Speed);
+                }
+                //
+                if (input[2] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Mass != vehicle.Mass);
+                }
+                else if (input[2] == 'U')
+                {
+                    vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
+                    vehicles.RemoveAll(x => (vehicle.Mass - x.Mass) > 6);
+                }
+                else if (input[2] == 'D')
+                {
+                    vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
+                    vehicles.RemoveAll(x => (x.Mass - vehicle.Mass) > 6);
+                }
+                else if (input[2] == 'T')
+                {
+                    vehicles.RemoveAll(x => x.Mass <= vehicle.Mass);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Mass >= vehicle.Mass);
+                }
+                //
+                if (input[3] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Crew != vehicle.Crew);
+                }
+                else if (input[3] == 'U')
+                {
+                    vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
+                    vehicles.RemoveAll(x => (vehicle.Crew - x.Crew) > 1);
+                }
+                else if (input[3] == 'D')
+                {
+                    vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
+                    vehicles.RemoveAll(x => (x.Crew - vehicle.Crew) > 1);
+                }
+                else if (input[3] == 'T')
+                {
+                    vehicles.RemoveAll(x => x.Crew <= vehicle.Crew);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Crew >= vehicle.Crew);
+                }
+                //
+                if (input[4] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Regular != vehicle.Regular);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Regular == vehicle.Regular);
+                }
+                //
+                if (input[5] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Rating != vehicle.Rating);
+                }
+                else if (input[5] == 'U')
+                {
+                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
+                    vehicles.RemoveAll(x => (vehicle.Rating - x.Rating) > 1.0);
+                }
+                else if (input[5] == 'D')
+                {
+                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
+                    vehicles.RemoveAll(x => (x.Rating - vehicle.Rating) > 1.0);
+                }
+                else if (input[5] == 'T')
+                {
+                    vehicles.RemoveAll(x => x.Rating <= vehicle.Rating);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Rating >= vehicle.Rating);
+                }
+                //
+                if (input[6] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Type != vehicle.Type);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Type == vehicle.Type);
+                }
+                //
+                if (input[7] == 'C')
+                {
+                    vehicles.RemoveAll(x => x.Caliber != vehicle.Caliber);
+                }
+                else if (input[7] == 'U')
+                {
+                    vehicles.RemoveAll(x => x.Caliber == vehicle.Caliber);
+                    vehicles.RemoveAll(x => (vehicle.Caliber - x.Caliber) > 15.0);
+                }
+                else if (input[7] == 'D')
+                {
+                    vehicles.RemoveAll(x => x.Caliber == vehicle.Caliber);
+                    vehicles.RemoveAll(x => (x.Caliber - vehicle.Caliber) > 15.0);
+                }
+                else if (input[7] == 'T')
+                {
+                    vehicles.RemoveAll(x => x.Caliber <= vehicle.Caliber);
+                }
+                else
+                {
+                    vehicles.RemoveAll(x => x.Caliber >= vehicle.Caliber);
+                }
+                vehicles.ForEach(x => x.Score = 0);
+            }
+        }
+        private static void Weigh()
+        {
+            Console.WriteLine("Weighing Data...");
+            foreach (Vehicle vehicle in vehicles)
+            {
+                foreach (Vehicle subvehicle in vehicles)
+                {
+                    if (subvehicle == vehicle) continue;
+                    if (vehicle.Country == subvehicle.Country)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    if (vehicle.Speed == subvehicle.Speed)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    else if (Math.Abs(vehicle.Speed - subvehicle.Speed) <= 8)
+                    {
+                        vehicle.Score += 1;
+                    }
+                    if (vehicle.Mass == subvehicle.Mass)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    else if (Math.Abs(vehicle.Mass - subvehicle.Mass) <= 6.0)
+                    {
+                        vehicle.Score += 1;
+                    }
+                    if (vehicle.Crew == subvehicle.Crew)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    else if (Math.Abs(vehicle.Crew - subvehicle.Crew) <= 1)
+                    {
+                        vehicle.Score += 1;
+                    }
+                    if (vehicle.Regular == subvehicle.Regular)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    if (vehicle.Rating == subvehicle.Rating)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    else if (Math.Abs(vehicle.Rating - subvehicle.Rating) <= 1.0)
+                    {
+                        vehicle.Score += 1;
+                    }
+                    if (vehicle.Type == subvehicle.Type)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    if (vehicle.Caliber == subvehicle.Caliber)
+                    {
+                        vehicle.Score += 3;
+                    }
+                    else if (Math.Abs(vehicle.Caliber - subvehicle.Caliber) <= 15.0)
+                    {
+                        vehicle.Score += 1;
+                    }
+                }
+            }
+            vehicles = vehicles.OrderByDescending(x => x.Score).ToList();
+            Console.WriteLine($"\nGuess: \"{vehicles[0].Name}\"");
+            Console.WriteLine($"Vehicles remaining: {vehicles.Count} | Guess score: {Math.Round((double)vehicles[0].Score * 100 / vehicles.Sum(x => x.Score), 2)}%");
+        }
     }
     public class Vehicle
     {
@@ -251,7 +493,8 @@ namespace Wardler
         public double Rating { get; set; } //
         public string Type { get; set; } //
         public double Caliber { get; set; } //
-        public Vehicle(string name, string country, int speed, double mass, int crew, bool regular, double rating, string type, double caliber)
+        public int Score { get; set; }
+        public Vehicle(string name, string country, int speed, double mass, int crew, bool regular, double rating, string type, double caliber, int score = 0)
         {
             Name = name;
             Country = country;
@@ -262,6 +505,7 @@ namespace Wardler
             Rating = rating;
             Type = type;
             Caliber = caliber;
+            Score = score;
         }
     }
 }
