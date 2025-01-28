@@ -414,7 +414,7 @@ namespace Wardler
                 }
                 vehicles.ForEach(x => x.Score = 0);
             }
-            Console.WriteLine($"Vehicle is {vehicles[0].Name}. Peasy!");
+            Console.WriteLine($"Vehicle is \"{vehicles[0].Name}\" ({vehicles[0].Country}). Peasy!");
         }
         private static void Weigh()
         {
@@ -479,7 +479,7 @@ namespace Wardler
                 }
             }
             vehicles = vehicles.OrderByDescending(x => x.Score).ToList();
-            Console.WriteLine($"\nGuess: \"{vehicles[0].Name}\"");
+            Console.WriteLine($"\nGuess: \"{vehicles[0].Name}\" ({vehicles[0].Country})");
             Console.WriteLine($"Vehicles remaining: {vehicles.Count} | Guess score: {Math.Round((double)vehicles[0].Score * 100 / vehicles.Sum(x => x.Score), 2)}%");
         }
     }
