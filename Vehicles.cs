@@ -176,12 +176,14 @@ namespace Wardler
                     vehicle.Caliber = 165.0;
                     break;
                 case "FLARAKPZ 1":
-                case "XM975":
                 case "LOSAT":
+                case "ROLAND 1":
+                case "XM975":
                     vehicle.Caliber = 163.0;
                     break;
                 case "ANTELOPE":
                 case "CM25":
+                case "GIRAF":
                 case string b when b.EndsWith("IMP.CHAPARRAL"):
                 case string c when c.EndsWith("M113A1 (TOW)"):
                 case "M901":
