@@ -414,6 +414,7 @@ namespace Wardler
                 }
                 vehicles.ForEach(x => x.Score = 0);
             }
+            Console.WriteLine($"Vehicle is {vehicles[0].Name}. Peasy!");
         }
         private static void Weigh()
         {
