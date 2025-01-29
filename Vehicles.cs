@@ -260,8 +260,19 @@ namespace Wardler
             while (vehicles.Count > 1)
             {
                 Weigh();
-                Console.Write("\nResult: ");
-                string input = Console.ReadLine().ToUpper();
+                string input = "";
+                while (input.Length != 8)
+                {
+                    Console.Write("\nResult: ");
+                    input = Console.ReadLine().ToUpper();
+                    if (input == "LIST")
+                    {
+                        foreach (Vehicle v in vehicles)
+                        {
+                            Console.WriteLine($"\"{v.Name}\" ({v.Country})");
+                        }
+                    }
+                }
                 Vehicle vehicle = new Vehicle(
                     vehicles[0].Name,
                     vehicles[0].Country,
