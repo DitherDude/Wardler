@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Text.RegularExpressions;
 
 namespace Wardler
 {
@@ -82,36 +73,49 @@ namespace Wardler
             //Console.ReadLine();
             int cnt = 0;
             Console.Write($"\rCrawling {cnt}/{urls.Count}... ");
-            Parallel.For(0, urls.Count, i =>
+            if (Program.quick)
             {
-                short ok = 0;
-                /// Parallel.For is quick. However, it is also
-                /// extremely unreliable. Since I'm not a normal person,
-                /// instead of using a normal for, I'll just perform the
-                /// operation twice, as occasionally the regex returns
-                /// with no elements when there should be (but sometimes
-                /// it also returns no elements b/c the Wiki is missing
-                /// the info)
-                while (ok < 2)
+                Parallel.For(0, urls.Count, i =>
                 {
-                    Vehicle vehicle = new Vehicle("", "", 0, 0, 0, false, 0, "", 0);
-                    try
+                    short ok = 0;
+                    /// Parallel.For is quick. However, it is also
+                    /// extremely unreliable. Since I'm not a normal person,
+                    /// instead of using a normal for, I'll just perform the
+                    /// operation twice, as occasionally the regex returns
+                    /// with no elements when there should be (but sometimes
+                    /// it also returns no elements b/c the Wiki is missing
+                    /// the info)
+                    while (ok < 2)
                     {
-                        Vehicles_Crawl(i, vehicle);
-                        ok = 2;
-                    }
-                    catch (Exception ex)
-                    {
-                        ok++;
-                        if (ok == 2)
+                        Vehicle vehicle = new Vehicle("", "", 0, 0, 0, false, 0, "", 0);
+                        try
                         {
-                            throw new Exception(ex.Message);
+                            Vehicles_Crawl(i, vehicle);
+                            ok = 2;
+                        }
+                        catch (Exception ex)
+                        {
+                            ok++;
+                            if (ok == 2)
+                            {
+                                throw new Exception(ex.Message);
+                            }
                         }
                     }
+                    cnt++;
+                    Console.Write($"\rCrawling {cnt}/{urls.Count}... ");
+                });
+            }
+            else
+            {
+                for (int i = 0; i < urls.Count; i++)
+                {
+                    Vehicle vehicle = new Vehicle("", "", 0, 0, 0, false, 0, "", 0);
+                    Vehicles_Crawl(i, vehicle);
+                    cnt++;
+                    Console.Write($"\rCrawling {cnt}/{urls.Count}... ");
                 }
-                cnt++;
-                Console.Write($"\rCrawling {cnt}/{urls.Count}... ");
-            });
+            }
         }
         private static void Vehicles_Crawl(int i, Vehicle vehicle)
         {
@@ -296,11 +300,11 @@ namespace Wardler
                 }
                 else if (input[1] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Speed <= vehicle.Speed);
+                    vehicles.RemoveAll(x => x.Speed <= vehicle.Speed + 8);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Speed >= vehicle.Speed);
+                    vehicles.RemoveAll(x => x.Speed >= vehicle.Speed - 8);
                 }
                 //
                 if (input[2] == 'C')
@@ -319,11 +323,11 @@ namespace Wardler
                 }
                 else if (input[2] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Mass <= vehicle.Mass);
+                    vehicles.RemoveAll(x => x.Mass <= vehicle.Mass + 6);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Mass >= vehicle.Mass);
+                    vehicles.RemoveAll(x => x.Mass >= vehicle.Mass - 6);
                 }
                 //
                 if (input[3] == 'C')
@@ -342,11 +346,11 @@ namespace Wardler
                 }
                 else if (input[3] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Crew <= vehicle.Crew);
+                    vehicles.RemoveAll(x => x.Crew <= vehicle.Crew + 1);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Crew >= vehicle.Crew);
+                    vehicles.RemoveAll(x => x.Crew >= vehicle.Crew - 1);
                 }
                 //
                 if (input[4] == 'C')
@@ -374,11 +378,11 @@ namespace Wardler
                 }
                 else if (input[5] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Rating <= vehicle.Rating);
+                    vehicles.RemoveAll(x => x.Rating <= vehicle.Rating + 1.0);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Rating >= vehicle.Rating);
+                    vehicles.RemoveAll(x => x.Rating >= vehicle.Rating - 1.0);
                 }
                 //
                 if (input[6] == 'C')
@@ -406,15 +410,25 @@ namespace Wardler
                 }
                 else if (input[7] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Caliber <= vehicle.Caliber);
+                    vehicles.RemoveAll(x => x.Caliber <= vehicle.Caliber + 15.0);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Caliber >= vehicle.Caliber);
+                    vehicles.RemoveAll(x => x.Caliber >= vehicle.Caliber - 15.0);
                 }
                 vehicles.ForEach(x => x.Score = 0);
             }
-            Console.WriteLine($"Vehicle is \"{vehicles[0].Name}\" ({vehicles[0].Country}). Peasy!");
+            if (vehicles.Count == 0)
+            {
+                Console.WriteLine("Oops! Something went wrong. No vehicles left.");
+            }
+            else
+            {
+                Console.WriteLine($"Vehicle is \"{vehicles[0].Name}\" ({vehicles[0].Country}). Peasy!");
+            }
+            Console.WriteLine("Press any key to exit.");
+            Console.ReadKey();
+            Environment.Exit(0);
         }
         private static void Weigh()
         {

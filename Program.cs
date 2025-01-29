@@ -1,12 +1,9 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
-
+﻿
 namespace Wardler
 {
     internal class Program
     {
+        public static bool quick = true;
         static void Main(string[] args)
         {
             Vehicles.CheckCrawl();
