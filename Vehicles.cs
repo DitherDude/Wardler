@@ -184,6 +184,9 @@ namespace Wardler
                 case "AFT09":
                     vehicle.Caliber = 152.0;
                     break;
+                case "BA-11":
+                    vehicle.Caliber = 45.0;
+                    break;
                 case "GAZ-AAA (DSHK)":
                     vehicle.Caliber = 12.7;
                     break;
