@@ -272,7 +272,7 @@ namespace Wardler
                     {
                         foreach (Vehicle v in vehicles)
                         {
-                            Console.WriteLine($"\"{v.Name}\" ({v.Country})");
+                            Console.WriteLine($"\"{v.Name}\" ({v.Country}) [{v.Score}]");
                         }
                     }
                 }
