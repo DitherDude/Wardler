@@ -306,13 +306,13 @@ namespace Wardler
                 {
                     vehicles.RemoveAll(x => x.Speed >= (vehicle.Speed + 8));
                     //vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
-                    //vehicles.RemoveAll(x => (vehicle.Speed - x.Speed) > 8);
+                    vehicles.RemoveAll(x => (vehicle.Speed - x.Speed) > 8);
                 }
                 else if (input[1] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Speed <= (vehicle.Speed - 8));
                     //vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
-                    //vehicles.RemoveAll(x => (x.Speed - vehicle.Speed) > 8);
+                    vehicles.RemoveAll(x => (x.Speed - vehicle.Speed) > 8);
                 }
                 else if (input[1] == 'T')
                 {
@@ -331,13 +331,13 @@ namespace Wardler
                 {
                     vehicles.RemoveAll(x => x.Mass >= (vehicle.Mass + 6));
                     //vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
-                    //vehicles.RemoveAll(x => (vehicle.Mass - x.Mass) > 6);
+                    vehicles.RemoveAll(x => (vehicle.Mass - x.Mass) > 6);
                 }
                 else if (input[2] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Mass <= (vehicle.Mass - 6));
                     //vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
-                    //vehicles.RemoveAll(x => (x.Mass - vehicle.Mass) > 6);
+                    vehicles.RemoveAll(x => (x.Mass - vehicle.Mass) > 6);
                 }
                 else if (input[2] == 'T')
                 {
@@ -356,13 +356,13 @@ namespace Wardler
                 {
                     vehicles.RemoveAll(x => x.Crew >= (vehicle.Crew + 1));
                     //vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
-                    //vehicles.RemoveAll(x => (vehicle.Crew - x.Crew) > 1);
+                    vehicles.RemoveAll(x => (vehicle.Crew - x.Crew) > 1);
                 }
                 else if (input[3] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Crew <= (vehicle.Crew - 1));
                     //vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
-                    //vehicles.RemoveAll(x => (x.Crew - vehicle.Crew) > 1);
+                    vehicles.RemoveAll(x => (x.Crew - vehicle.Crew) > 1);
                 }
                 else if (input[3] == 'T')
                 {
