@@ -388,14 +388,14 @@ namespace Wardler
                 }
                 else if (input[5] == 'U')
                 {
+                    vehicles.RemoveAll(x => x.Rating > (vehicle.Rating + 1.0));
                     vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
                     vehicles.RemoveAll(x => (vehicle.Rating - x.Rating) > 1.0);
-                    vehicles.RemoveAll(x => x.Rating > (vehicle.Rating + 1.0));
                 }
                 else if (input[5] == 'D')
                 {
-                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
-                    vehicles.RemoveAll(x => x.Rating < (vehicle.Rating - 1.0));
+								vehicles.RemoveAll(x => x.Rating < (vehicle.Rating - 1.0));
+                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);   
                     vehicles.RemoveAll(x => (x.Rating - vehicle.Rating) > 1.0);
                 }
                 else if (input[5] == 'T')
