@@ -447,62 +447,74 @@ namespace Wardler
         private static void Weigh()
         {
             Console.WriteLine("Weighing Data...");
-            foreach (Vehicle vehicle in vehicles)
+            for (int i = 0; i < vehicles.Count; i++)
             {
-                foreach (Vehicle subvehicle in vehicles)
+                for (int j = i + 1; j < vehicles.Count; j++)
                 {
-                    if (subvehicle == vehicle) continue;
-                    if (vehicle.Country == subvehicle.Country)
+                    if (vehicles[i].Country == vehicles[j].Country)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    if (vehicle.Speed == subvehicle.Speed)
+                    if (vehicles[i].Speed == vehicles[j].Speed)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    else if (Math.Abs(vehicle.Speed - subvehicle.Speed) <= 8)
+                    else if (Math.Abs(vehicles[i].Speed - vehicles[j].Speed) <= 8)
                     {
-                        vehicle.Score += 1;
+                        vehicles[i].Score += 1;
+                        vehicles[j].Score += 1;
                     }
-                    if (vehicle.Mass == subvehicle.Mass)
+                    if (vehicles[i].Mass == vehicles[j].Mass)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    else if (Math.Abs(vehicle.Mass - subvehicle.Mass) <= 6.0)
+                    else if (Math.Abs(vehicles[i].Mass - vehicles[j].Mass) <= 6.0)
                     {
-                        vehicle.Score += 1;
+                        vehicles[i].Score += 1;
+                        vehicles[j].Score += 1;
                     }
-                    if (vehicle.Crew == subvehicle.Crew)
+                    if (vehicles[i].Crew == vehicles[j].Crew)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    else if (Math.Abs(vehicle.Crew - subvehicle.Crew) <= 1)
+                    else if (Math.Abs(vehicles[i].Crew - vehicles[j].Crew) <= 1)
                     {
-                        vehicle.Score += 1;
+                        vehicles[i].Score += 1;
+                        vehicles[j].Score += 1;
                     }
-                    if (vehicle.Regular == subvehicle.Regular)
+                    if (vehicles[i].Regular == vehicles[j].Regular)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    if (vehicle.Rating == subvehicle.Rating)
+                    if (vehicles[i].Rating == vehicles[j].Rating)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    else if (Math.Abs(vehicle.Rating - subvehicle.Rating) <= 1.0)
+                    else if (Math.Abs(vehicles[i].Rating - vehicles[j].Rating) <= 1.0)
                     {
-                        vehicle.Score += 1;
+                        vehicles[i].Score += 1;
+                        vehicles[j].Score += 1;
                     }
-                    if (vehicle.Type == subvehicle.Type)
+                    if (vehicles[i].Type == vehicles[j].Type)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    if (vehicle.Caliber == subvehicle.Caliber)
+                    if (vehicles[i].Caliber == vehicles[j].Caliber)
                     {
-                        vehicle.Score += 3;
+                        vehicles[i].Score += 3;
+                        vehicles[j].Score += 3;
                     }
-                    else if (Math.Abs(vehicle.Caliber - subvehicle.Caliber) <= 15.0)
+                    else if (Math.Abs(vehicles[i].Caliber - vehicles[j].Caliber) <= 15.0)
                     {
-                        vehicle.Score += 1;
+                        vehicles[i].Score += 1;
+                        vehicles[j].Score += 1;
                     }
                 }
             }
