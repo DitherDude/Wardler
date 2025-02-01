@@ -305,22 +305,20 @@ namespace Wardler
                 else if (input[1] == 'U')
                 {
                     vehicles.RemoveAll(x => x.Speed > (vehicle.Speed + 8));
-                    vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
-                    vehicles.RemoveAll(x => (vehicle.Speed - x.Speed) > 8);
+                    vehicles.RemoveAll(x => x.Speed <= vehicle.Speed);
                 }
                 else if (input[1] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Speed < (vehicle.Speed - 8));
-                    vehicles.RemoveAll(x => x.Speed == vehicle.Speed);
-                    vehicles.RemoveAll(x => (x.Speed - vehicle.Speed) > 8);
+                    vehicles.RemoveAll(x => x.Speed >= vehicle.Speed);
                 }
                 else if (input[1] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Speed <= vehicle.Speed + 8);
+                    vehicles.RemoveAll(x => x.Speed < vehicle.Speed + 8);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Speed >= vehicle.Speed - 8);
+                    vehicles.RemoveAll(x => x.Speed > vehicle.Speed - 8);
                 }
                 //
                 if (input[2] == 'C')
@@ -330,22 +328,20 @@ namespace Wardler
                 else if (input[2] == 'U')
                 {
                     vehicles.RemoveAll(x => x.Mass > (vehicle.Mass + 6));
-                    vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
-                    vehicles.RemoveAll(x => (vehicle.Mass - x.Mass) > 6);
+                    vehicles.RemoveAll(x => x.Mass <= vehicle.Mass);
                 }
                 else if (input[2] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Mass < (vehicle.Mass - 6));
-                    vehicles.RemoveAll(x => x.Mass == vehicle.Mass);
-                    vehicles.RemoveAll(x => (x.Mass - vehicle.Mass) > 6);
+                    vehicles.RemoveAll(x => x.Mass >= vehicle.Mass);
                 }
                 else if (input[2] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Mass <= vehicle.Mass + 6);
+                    vehicles.RemoveAll(x => x.Mass < vehicle.Mass + 6);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Mass >= vehicle.Mass - 6);
+                    vehicles.RemoveAll(x => x.Mass > vehicle.Mass - 6);
                 }
                 //
                 if (input[3] == 'C')
@@ -355,22 +351,20 @@ namespace Wardler
                 else if (input[3] == 'U')
                 {
                     vehicles.RemoveAll(x => x.Crew > (vehicle.Crew + 1));
-                    vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
-                    vehicles.RemoveAll(x => (vehicle.Crew - x.Crew) > 1);
+                    vehicles.RemoveAll(x => x.Crew <= vehicle.Crew);
                 }
                 else if (input[3] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Crew < (vehicle.Crew - 1));
-                    vehicles.RemoveAll(x => x.Crew == vehicle.Crew);
-                    vehicles.RemoveAll(x => (x.Crew - vehicle.Crew) > 1);
+                    vehicles.RemoveAll(x => x.Crew >= vehicle.Crew);
                 }
                 else if (input[3] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Crew <= vehicle.Crew + 1);
+                    vehicles.RemoveAll(x => x.Crew < vehicle.Crew + 1);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Crew >= vehicle.Crew - 1);
+                    vehicles.RemoveAll(x => x.Crew > vehicle.Crew - 1);
                 }
                 //
                 if (input[4] == 'C')
@@ -389,22 +383,20 @@ namespace Wardler
                 else if (input[5] == 'U')
                 {
                     vehicles.RemoveAll(x => x.Rating > (vehicle.Rating + 1.0));
-                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
-                    vehicles.RemoveAll(x => (vehicle.Rating - x.Rating) > 1.0);
+                    vehicles.RemoveAll(x => x.Rating <= vehicle.Rating);
                 }
                 else if (input[5] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Rating < (vehicle.Rating - 1.0));
-                    vehicles.RemoveAll(x => x.Rating == vehicle.Rating);
-                    vehicles.RemoveAll(x => (x.Rating - vehicle.Rating) > 1.0);
+                    vehicles.RemoveAll(x => x.Rating >= vehicle.Rating);
                 }
                 else if (input[5] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Rating <= vehicle.Rating + 1.0);
+                    vehicles.RemoveAll(x => x.Rating < vehicle.Rating + 1.0);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Rating >= vehicle.Rating - 1.0);
+                    vehicles.RemoveAll(x => x.Rating > vehicle.Rating - 1.0);
                 }
                 //
                 if (input[6] == 'C')
@@ -423,22 +415,20 @@ namespace Wardler
                 else if (input[7] == 'U')
                 {
                     vehicles.RemoveAll(x => x.Caliber > (vehicle.Caliber + 15.0));
-                    vehicles.RemoveAll(x => x.Caliber == vehicle.Caliber);
-                    vehicles.RemoveAll(x => (vehicle.Caliber - x.Caliber) > 15.0);
+                    vehicles.RemoveAll(x => x.Caliber <= vehicle.Caliber);
                 }
                 else if (input[7] == 'D')
                 {
                     vehicles.RemoveAll(x => x.Caliber < (vehicle.Caliber - 15.0));
-                    vehicles.RemoveAll(x => x.Caliber == vehicle.Caliber);
-                    vehicles.RemoveAll(x => (x.Caliber - vehicle.Caliber) > 15.0);
+                    vehicles.RemoveAll(x => x.Caliber >= vehicle.Caliber);
                 }
                 else if (input[7] == 'T')
                 {
-                    vehicles.RemoveAll(x => x.Caliber <= vehicle.Caliber + 15.0);
+                    vehicles.RemoveAll(x => x.Caliber < vehicle.Caliber + 15.0);
                 }
                 else
                 {
-                    vehicles.RemoveAll(x => x.Caliber >= vehicle.Caliber - 15.0);
+                    vehicles.RemoveAll(x => x.Caliber > vehicle.Caliber - 15.0);
                 }
                 vehicles.ForEach(x => x.Score = 0);
             }
