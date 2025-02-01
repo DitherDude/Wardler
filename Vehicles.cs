@@ -160,7 +160,15 @@ namespace Wardler
                 .Replace(" ", "")
                 .Replace("persons</span>", "").ToUpper()).ToArray();
             vehicle.Crew = int.Parse(values[0]);
-            vehicle.Regular = !data.Contains("<div class=\"game-unit_card-info_title\">Status</div>");
+            if (vehicle.Name.EndsWith("MERKAVA MK.3D"))
+            {
+                // The official wiki got this wrong!
+                vehicle.Regular = false;
+            }
+            else
+            {
+                vehicle.Regular = !data.Contains("<div class=\"game-unit_card-info_title\">Status</div>");
+            }
             values = Regex.Matches(data, @"<div\s*class=""mode"">RB</div>\s*<div\s*class=""value"">\d*.\d")
                 .OfType<Match>().Select(x => x.ToString()
                 .Replace(" ", "")
