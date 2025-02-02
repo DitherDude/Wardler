@@ -271,11 +271,11 @@ namespace Wardler
             while (vehicles.Count > 1)
             {
                 Weigh();
-                string input = "";
-                while (input.Length != 8)
+                string? input = "";
+                while (input?.Length != 8)
                 {
                     Console.Write("\nResult: ");
-                    input = Console.ReadLine().ToUpper();
+                    input = Console.ReadLine()?.ToUpper();
                     if (input == "LIST")
                     {
                         foreach (Vehicle v in vehicles)
