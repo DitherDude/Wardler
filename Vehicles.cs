@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wardler
 {
-    internal partial class Vehicles
+    internal class Vehicles
     {
         public static string data = "";
         public static List<string> urls = new List<string>();
