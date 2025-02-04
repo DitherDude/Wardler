@@ -1,8 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Wardler
 {
-    internal class Vehicles
+    internal partial class Vehicles
     {
         public static string data = "";
         public static List<string> urls = new List<string>();
@@ -28,7 +32,9 @@ namespace Wardler
             {
                 Console.WriteLine("vehicles.war file is missing. Initiating crawl.");
                 Console.WriteLine("Not recommended if you have limited data/internet connection.");
-                Crawl();
+                //Task task = Crawl();
+                //task.Wait();
+                Crawl_old();
                 using (StreamWriter file = new StreamWriter("vehicles.war"))
                 {
                     foreach (Vehicle vehicle in vehicles)
@@ -54,7 +60,7 @@ namespace Wardler
             Console.WriteLine("You should now enter all 8 letters, with no spaces.");
             Console.WriteLine("e.g. IBBUCBCC");
         }
-        private static void Crawl()
+        private static void Crawl_old()
         {
             Console.WriteLine("Initiating vehicle crawler...");
             using (HttpClient client = new HttpClient())
@@ -90,7 +96,7 @@ namespace Wardler
                         Vehicle vehicle = new Vehicle("", "", 0, 0, 0, false, 0, "", 0);
                         try
                         {
-                            Vehicles_Crawl(i, vehicle);
+                            Vehicles_Crawl_old(i, vehicle);
                             ok = 2;
                         }
                         catch (Exception ex)
@@ -111,13 +117,164 @@ namespace Wardler
                 for (int i = 0; i < urls.Count; i++)
                 {
                     Vehicle vehicle = new Vehicle("", "", 0, 0, 0, false, 0, "", 0);
-                    Vehicles_Crawl(i, vehicle);
+                    Vehicles_Crawl_old(i, vehicle);
                     cnt++;
                     Console.Write($"\rCrawling {cnt}/{urls.Count}... ");
                 }
             }
         }
+        private static async Task Crawl()
+        {
+            string dataraw = "";
+            Console.WriteLine("Initiating vehicle crawler...");
+            /*
+            foreach (string filename in Directory.GetFiles("/mnt/data/home/dither/Downloads/Datamine/aces.vromfs.bin_u/gamedata/units/tankmodels/"))
+            {
+                urls.Add($"file://{filename}");
+            }*/
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0");
+                string post = @"query RepoTreeQuery($owner: String!, $name: String!, $path: String!) {
+  repository(owner: $owner, name: $name) {
+    id
+    defaultBranchRef {
+      name
+      id
+      __typename
+    }
+    object(expression: $path) {
+      id
+      ...TreeFields
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment TreeFields on Tree {
+  id
+  entries {
+    ...TreeEntryFields
+    __typename
+  }
+}
+
+fragment TreeEntryFields on TreeEntry {
+  name
+  type
+  path
+  oid
+}";
+                string variables = $"{{\"owner\":\"gszabi99\",\"name\":\"War-Thunder-Datamine\",\"path\":\"master:aces.vromfs.bin_u/gamedata/units/tankmodels\"}}";
+                string postData = $"{{\"query\":\"{post.Replace("\n", "\\n").Replace("\"", "\\\"")}\",\"operationName\":\"RepoTreeQuery\",\"variables\":{variables}}}";
+                StringContent content = new StringContent(postData, Encoding.UTF8, "application/json");
+                using (var response = await client.PostAsync("https://api.github.com/graphql", content))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string temp = await response.Content.ReadAsStringAsync();
+                        //Console.WriteLine(temp);
+                        dataraw = temp;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode}");
+                        Console.WriteLine(await response.Content.ReadAsStringAsync());
+                        Console.WriteLine("Press any key to exit.");
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
+                }
+            }
+            urls.AddRange(Regex.Matches(dataraw, @"""name"":"".*?\.blkx")
+            .OfType<Match>().Select(x => x.ToString()
+            .Replace("\"name\":\"", "https://raw.githubusercontent.com/gszabi99/War-Thunder-Datamine/master/aces.vromfs.bin_u/gamedata/units/tankmodels/"))
+            .ToArray());
+            Console.WriteLine(urls.Count());
+            Console.ReadKey();
+            if (Program.quick)
+            {
+                Parallel.For(0, urls.Count, i =>
+                {
+                    Vehicle vehicle = new Vehicle("", "", 0, 0, 0, true, 0, "", 0);
+                    Vehicles_Crawl(i, vehicle);
+                    vehicles.Add(vehicle);
+                });
+            }
+            else
+            {
+                for (int i = 0; i<urls.Count; i++)
+                {
+                    Vehicle vehicle = new Vehicle("", "", 0, 0, 0, true, 0, "", 0);
+                    Vehicles_Crawl(i, vehicle);
+                    vehicles.Add(vehicle);
+                }
+            }
+            Environment.Exit(0);
+        }
         private static void Vehicles_Crawl(int i, Vehicle vehicle)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, urls[i]);
+                var response = client.Send(request);
+                using var reader = new StreamReader(response.Content.ReadAsStream());
+                data = reader.ReadToEnd();
+            }/*
+            using (StreamReader sr = new StreamReader(urls[i].Replace("file://", "")))
+            {
+                data = sr.ReadToEnd();
+            }
+            */
+            string[] matches = Regex.Matches(data, @"""model"":(?!,).*?,")
+            .OfType<Match>().Select(x => x.ToString()
+            .Remove(0, 10)
+            .Replace("\",", "").ToUpper()).ToArray();
+            vehicle.Name = matches[0];
+            matches = Regex.Matches(urls[i], @"/tankmodels/.*?_")
+            .OfType<Match>().Select(x => x.ToString()
+            .Replace("/tankmodels/", "")
+            .Replace("_", "").ToUpper()).ToArray();
+            vehicle.Country = matches[0];
+            // matches = Regex.Matches(data, @"""speed"":(?!,).*?,")
+            // .OfType<Match>().Select(x => x.ToString()
+            // .Remove(0, 9)
+            // .Replace("\",", "").ToUpper()).ToArray();
+            // vehicle.Speed = int.Parse(matches[0]);
+            matches = Regex.Matches(data, @"""TakeOff"":(?!,).*?,")
+            .OfType<Match>().Select(x => x.ToString()
+            .Remove(0, 11)
+            .Replace("\",", "").ToUpper()).ToArray();
+            vehicle.Mass = (double)double.Parse(matches[0])/ 1000;
+            matches = Regex.Matches(data, @"""role"":(?!,).*?,")
+            .OfType<Match>().Select(x => x.ToString()).ToArray();
+            vehicle.Crew = matches.Count();
+            // matches = Regex.Matches(data, @"""regular"":(?!,).*?,")
+            // .OfType<Match>().Select(x => x.ToString()
+            // .Remove(0, x)
+            // .Replace("\",", "").ToUpper()).ToArray();
+            // vehicle.Regular = bool.Parse(matches[0]);
+            // matches = Regex.Matches(data, @"""rating"":(?!,).*?,")
+            // .OfType<Match>().Select(x => x.ToString()   
+            // .Remove(0, x)
+            // .Replace("\",", "").ToUpper()).ToArray();
+            // vehicle.Rating = double.Parse(matches[0]);
+            matches = Regex.Matches(data, @"""expClass"":(?!,).*?,")
+            .OfType<Match>().Select(x => x.ToString()
+            .Remove(0, 13)
+            .Replace("\",", "").ToUpper()).ToArray();
+            vehicle.Type = matches[0];
+            // matches = Regex.Matches(data, @"""caliber"":(?!,).*?,")
+            // .OfType<Match>().Select(x => x.ToString()
+            // .Remove(0, x)
+            // .Replace("\",", "").ToUpper()).ToArray();
+            // vehicle.Caliber = double.Parse(matches[0]);
+            
+        }
+        private static void Vehicles_Crawl_old(int i, Vehicle vehicle)
         {
             using (HttpClient client = new HttpClient())
             {
