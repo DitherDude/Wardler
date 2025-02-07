@@ -5,7 +5,7 @@ export function calculateGroundVehicleSpeed(model: VehicleModel): number {
     ((data.engine.maxRPM * data.mechanics.driveGearRadius) /
       (data.mechanics.mainGearRatio *
         data.mechanics.sideGearRatio *
-        data.mechanics.gearRatios.ratio[
+        data.mechanics.gearRatios[
           data.mechanics.gearRatios.ratio.length - 1
         ])) *
       0.12 *

@@ -1,13 +1,11 @@
 ﻿
-namespace Wardler
+namespace Wardler;
+internal class Program
 {
-    internal class Program
+    public static bool quick = true;
+    static void Main(string[] args)
     {
-        public static bool quick = true;
-        static void Main(string[] args)
-        {
-            Vehicles.CheckCrawl();
-            Vehicles.Wardle();
-        }
+        Vehicles.CheckCrawl();
+        Vehicles.Wardle();
     }
 }
